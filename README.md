@@ -15,6 +15,17 @@ Example usage where we want to find machiens with at least 6 cpus in the eu-west
 PARKINGSPOT_API_KEY=wKHxyfeayimNEs-v3B80a_VC1VXgDKdp_w== ./parkingspot -cpu 6 -region eu-west-1
 ```
 
+Example output:
+
+```
+PARKINGSPOT_REGION=us-west-2
+PARKINGSPOT_AZ=us-west-2c
+PARKINGSPOT_BID=0.068674
+PARKINGSPOT_INSTANCE_TYPE=r3.xlarge
+```
+
+## Flags
+
 ```
 Usage of ./parkingspot:
   -api-key string

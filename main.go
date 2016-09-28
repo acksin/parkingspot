@@ -6,11 +6,24 @@ import (
 	"flag"
 	"fmt"
 	"io/ioutil"
+	"math/rand"
 	"net/http"
 	"os"
 )
 
 var url = "https://api.parkingspot.bid/v1/spot/me"
+
+type SpotPrice struct {
+	AZ             string
+	InstanceType   string
+	RecommendedBid float64
+	Mean           float64
+	Median         float64
+	StdDev         float64
+	SavingsPercent float64
+	OnDemandPrice  float64
+	DataSet        int64
+}
 
 type SpotMeRequest struct {
 	Region    string
@@ -20,13 +33,6 @@ type SpotMeRequest struct {
 	Duration  int
 
 	apiKey string
-}
-
-type SpotMeResponse struct {
-	AZ             string
-	Region         string
-	RecommendedBid float64
-	InstanceType   string
 }
 
 func main() {
@@ -55,7 +61,14 @@ func main() {
 	defer resp.Body.Close()
 
 	body, _ := ioutil.ReadAll(resp.Body)
-	// if resp.StatusCode == 200 {
-	fmt.Println(string(body))
-	//}
+	if resp.StatusCode == 200 {
+		var j []SpotPrice
+
+		json.Unmarshal(body, &j)
+		c := j[rand.Intn(len(j))]
+
+		fmt.Printf("PARKINGSPOT_REGION=%s\nPARKINGSPOT_AZ=%s\nPARKINGSPOT_BID=%f\nPARKINGSPOT_INSTANCE_TYPE=%s", c.AZ[0:len(c.AZ)-1], c.AZ, c.RecommendedBid, c.InstanceType)
+
+		fmt.Println()
+	}
 }
