@@ -3,7 +3,6 @@
 VERSION=$(cat VERSION)
 
 rm -rf ./pkg/
-mkdir -p ./pkg/dist
 
 gox -output "pkg/{{.OS}}_{{.Arch}}/parkingspot"
 
@@ -17,13 +16,16 @@ for PLATFORM in $(find ./pkg -mindepth 1 -maxdepth 1 -type d); do
     popd >/dev/null 2>&1
 done
 
-git commit -m "Version $(VERSION)"
-git tag v$(VERSION) && git push --tags
+git commit -m "Version ${VERSION}"
+git tag v${VERSION} && git push --tags
 
-github-release release --user acksin --repo parkingspot --tag v$(VERSION) --name "ParkingSpot $(VERSION)"
+github-release release --user acksin --repo parkingspot --tag v${VERSION} --name "ParkingSpot ${VERSION}"
 
+mkdir -p ./pkg/dist
 pushd pkg/dist
 
 for f in $(find ./ -mindepth 1 -maxdepth 1 -type f); do
-    github-release upload --user acksin --repo parkingspot --tag v$(VERSION) --name echo $(basename $f) --file $f
+    NAME=$(basename $f)
+    echo $NAME
+    github-release upload --user acksin --repo parkingspot --tag v${VERSION} --name "${NAME}" --file ${NAME}
 done
