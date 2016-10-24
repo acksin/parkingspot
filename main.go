@@ -5,13 +5,13 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"io/ioutil"
-	"math/rand"
 	"net/http"
 	"os"
 )
 
-var url = "https://api.parkingspot.bid/v1/spot/me"
+var (
+	url = "https://api.parkingspot.bid/v1/spot/me"
+)
 
 type SpotPrice struct {
 	AZ             string
@@ -49,6 +49,10 @@ func main() {
 
 	b, err := json.Marshal(c)
 
+	if os.Getenv("PARKINGSPOT_URL") != "" {
+		url = os.Getenv("PARKINGSPOT_URL")
+	}
+
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(b))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-PARKINGSPOT-API-KEY", c.apiKey)
@@ -58,17 +62,12 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	defer resp.Body.Close()
 
-	body, _ := ioutil.ReadAll(resp.Body)
 	if resp.StatusCode == 200 {
-		var j []SpotPrice
+		d := &SpotPrice{}
 
-		json.Unmarshal(body, &j)
-		c := j[rand.Intn(len(j))]
-
-		fmt.Printf("PARKINGSPOT_REGION=%s\nPARKINGSPOT_AZ=%s\nPARKINGSPOT_BID=%f\nPARKINGSPOT_INSTANCE_TYPE=%s", c.AZ[0:len(c.AZ)-1], c.AZ, c.RecommendedBid, c.InstanceType)
-
-		fmt.Println()
+		if err := json.NewDecoder(resp.Body).Decode(d); err == nil {
+			fmt.Printf("PARKINGSPOT_REGION=%s\nPARKINGSPOT_AZ=%s\nPARKINGSPOT_BID=%f\nPARKINGSPOT_INSTANCE_TYPE=%s\n", d.AZ[0:len(d.AZ)-1], d.AZ, d.RecommendedBid, d.InstanceType)
+		}
 	}
 }
