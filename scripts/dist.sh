@@ -3,6 +3,7 @@
 VERSION=$(cat VERSION)
 
 rm -rf ./pkg/
+mkdir -p ./pkg/dist
 
 gox -output "pkg/{{.OS}}_{{.Arch}}/parkingspot"
 
