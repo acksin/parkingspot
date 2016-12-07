@@ -1,0 +1,70 @@
+
+select avg(spot_price::money::numeric::float8) foo from spot_prices where instance_type = 'r3.xlarge' and availability_zone = 'us-west-2a';
+
+
+#+begin_src sh
+
+#+end_src
+
+#+RESULTS:
+
+
+Questions:
+
+ - [ ] What are all the availability zones?
+ - [ ] What are the normal prices for each of the zones?
+ - [ ]
+
+
+ us-west-2a        |      $0.04 | r3.xlarge     | 2016-05-30 23:57:18
+ us-west-2a        |      $0.04 | r3.xlarge     | 2016-05-30 02:58:36
+ us-west-2a        |      $0.04 | r3.xlarge     | 2016-05-30 02:52:35
+ us-west-2a        |      $0.04 | r3.xlarge     | 2016-05-30 02:49:26
+ us-west-2a        |      $0.04 | r3.xlarge     | 2016-05-30 02:48:49
+ us-west-2a        |      $0.13 | r3.xlarge     | 2016-05-30 02:44:31
+ us-west-2a        |      $0.04 | r3.xlarge     | 2016-05-30 02:37:30
+ us-west-2a        |      $0.04 | r3.xlarge     | 2016-05-30 02:26:04
+ us-west-2a        |      $0.04 | r3.xlarge     | 2016-05-30 02:21:10
+ us-west-2a        |      $0.04 | r3.xlarge     | 2016-05-30 02:15:10
+ us-west-2a        |      $0.04 | r3.xlarge     | 2016-05-30 02:11:30
+ us-west-2a        |      $0.04 | r3.xlarge     | 2016-05-30 02:08:14
+ us-west-2a        |      $0.04 | r3.xlarge     | 2016-05-30 02:05:27
+ us-west-2a        |      $0.04 | r3.xlarge     | 2016-05-30 02:04:21
+ us-west-2a        |      $0.04 | r3.xlarge     | 2016-05-30 02:00:32
+ us-west-2a        |      $0.04 | r3.xlarge     | 2016-05-30 01:59:26
+ us-west-2a        |      $0.04 | r3.xlarge     | 2016-05-30 01:58:57
+ us-west-2a        |      $0.04 | r3.xlarge     | 2016-05-30 01:39:21
+ us-west-2a        |      $0.04 | r3.xlarge     | 2016-05-30 01:32:20
+ us-west-2a        |      $0.04 | r3.xlarge     | 2016-05-30 01:27:24
+ us-west-2a        |      $0.04 | r3.xlarge     | 2016-05-30 01:09:05
+ us-west-2a        |      $0.04 | r3.xlarge     | 2016-05-30 01:08:26
+ us-west-2a        |      $0.04 | r3.xlarge     | 2016-05-30 01:06:50
+ us-west-2a        |      $0.04 | r3.xlarge     | 2016-05-30 01:06:22
+ us-west-2a        |      $0.04 | r3.xlarge     | 2016-05-30 01:05:11
+ us-west-2a        |      $0.04 | r3.xlarge     | 2016-05-30 00:59:13
+ us-west-2a        |      $0.04 | r3.xlarge     | 2016-05-30 00:48:26
+ us-west-2a        |      $0.04 | r3.xlarge     | 2016-05-30 00:46:16
+ us-west-2a        |      $0.04 | r3.xlarge     | 2016-05-30 00:26:09
+ us-west-2a        |      $0.04 | r3.xlarge     | 2016-05-30 00:15:50
+ us-west-2a        |      $0.04 | r3.xlarge     | 2016-05-30 00:07:43
+ us-west-2a        |      $0.04 | r3.xlarge     | 2016-05-30 00:07:09
+ us-west-2a        |      $0.04 | r3.xlarge     | 2016-05-30 00:05:30
+ us-west-2a        |      $0.04 | r3.xlarge     | 2016-05-30 00:02:13
+ us-west-2a        |      $0.04 | r3.xlarge     | 2016-05-30 00:00:36
+
+
+select spot_price, count(spot_price) as foo from spot_prices where product_description = 'Linux/UNIX' and instance_type = 'c4.4xlarge' and availability_zone = 'us-west-2a' and timestamp > now() - interval '1 month' group by spot_price order by spot_price desc;
+
+* Get median prices for all instances in a region
+
+
+select median(i.price), i.instance_type
+from (select f.spot_price::money::numeric::float8 as price, f.instance_type
+       from spot_prices f, instance_types j
+      where f.timestamp > now() - interval '7 day'
+        and f.availability_zone = 'us-east-1a'
+        and extract(hour from f.timestamp) >= 18
+        and extract(hour from f.timestamp) < 21
+        and f.product_description = 'Linux/UNIX'
+        and f.instance_type = j.instance_type
+     ) i group by i.instance_type order by i.instance_type desc;

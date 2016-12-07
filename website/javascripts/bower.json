@@ -1,0 +1,24 @@
+{
+  "name": "parkingspot",
+  "homepage": "https://github.com/acksin/fugue",
+  "authors": [
+    "Abhi Yerra <abhi@berkeley.edu>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "chartist": "^0.9.8",
+    "chartist-plugin-tooltip": "^0.0.16",
+    "chartist-plugin-axistitle": "https://github.com/alexstanbury/chartist-plugin-axistitle.git#^0.1.0",
+    "jquery-stupid-table": "^1.0.1"
+  }
+}
