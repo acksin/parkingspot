@@ -192,8 +192,12 @@ var Billing = React.createClass({
       <div>
         {this.state.alert}
 
+        <a href="https://www.parkingspot.bid/contact">Contact Us for Pricing</a>
+
+        {/*
         <BillingSubscribe plans={this.productList()} subscription={this.state.subscription} />
         <BillingUnsubscribe subscription={this.state.subscription} />
+        */}
       </div>
     );
 

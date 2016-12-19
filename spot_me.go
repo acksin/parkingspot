@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"time"
 
@@ -28,7 +27,7 @@ func SpotMeHandler(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	err := decoder.Decode(&s)
 	if err != nil {
-		log.Println("meh", err)
+		Config.Log(err.Error())
 	}
 
 	sub := commons.SubscriptionValue(r)
@@ -36,7 +35,7 @@ func SpotMeHandler(w http.ResponseWriter, r *http.Request) {
 		s.isFree = true
 	}
 
-	// log.Printf("Spot Me Criteria %#v", sub)
+	Config.Log(fmt.Sprintf("Spot Me Criteria %#v", sub))
 
 	go commons.NewEvent(commons.Event{
 		//Username:    commons.UsernameValue(r),
@@ -128,8 +127,6 @@ func (s *SpotMeRequest) GetRecommendation() *SpotPrice {
 			}
 		}
 	}
-
-	log.Println("All instances", instances)
 
 	if len(instances) > 0 {
 		return instances[0]

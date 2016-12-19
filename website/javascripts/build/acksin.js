@@ -294,8 +294,11 @@ var Billing = React.createClass({
       'div',
       null,
       this.state.alert,
-      React.createElement(BillingSubscribe, { plans: this.productList(), subscription: this.state.subscription }),
-      React.createElement(BillingUnsubscribe, { subscription: this.state.subscription })
+      React.createElement(
+        'a',
+        { href: 'https://www.parkingspot.bid/contact' },
+        'Contact Us for Pricing'
+      )
     );
 
     return React.createElement(Card, { title: 'Subscription', category: '', className: 'col-md-6', content: content });
