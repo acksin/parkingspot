@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -61,7 +61,7 @@ func GetSpotPricing2(w http.ResponseWriter, r *http.Request) {
 		isFree       = true
 	)
 
-	Config.Log(fmt.Sprintln("Pricing for", az, instanceType))
+	log.Println("Pricing for", az, instanceType)
 
 	dur, _ := strconv.ParseInt(duration, 10, 32)
 	if dur == 0 {
