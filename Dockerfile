@@ -9,8 +9,8 @@ RUN rm -rf /tmp/* /var/tmp/*
 ENV ACKSIN_ENV production
 
 COPY website /website
-COPY parkingspot /parkingspot
+COPY parkingspot-server /parkingspot-server
 
 EXPOSE 8081
 
-ENTRYPOINT /parkingspot
+ENTRYPOINT /parkingspot-server
