@@ -1,2 +1,5 @@
 /parkingspot
 /pkg/
+/stats/instanceTypes.js
+/stats/instance_types.go
+/stats/instance_types.json

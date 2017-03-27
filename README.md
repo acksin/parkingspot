@@ -9,10 +9,17 @@ anything that can use `ENV` variables.
 
 ## Usage
 
-Example usage where we want to find machiens with at least 6 cpus in the eu-west-1 region.
+### Generate Stats
 
 ```
-PARKINGSPOT_API_KEY=wKHxyfeayimNEs-v3B80a_VC1VXgDKdp_w== ./parkingspot -cpu 6 -region eu-west-1
+parkingspot stats --update
+```
+
+Example usage where we want to find instances with at least 6 cpus in
+the eu-west-1 region.
+
+```
+parkingspot new --cpu 6 -region eu-west-1 kubernetes-kops
 ```
 
 Example output:
