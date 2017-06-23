@@ -21,13 +21,9 @@ import (
 // ec2Cmd represents the ec2 command
 var ec2Cmd = &cobra.Command{
 	Use:   "ec2",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Information about Instances and Regions",
+	Long: `Find instance information and region information
+for Instances and Regions.`,
 }
 
 func init() {

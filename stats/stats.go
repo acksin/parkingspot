@@ -8,11 +8,12 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 
+	"strconv"
+	"sync"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ec2"
-	"strconv"
-	"sync"
 )
 
 type SpotPrice struct {
@@ -36,7 +37,7 @@ func (s *Stats) LoadDB() {
 		panic("failed to connect database")
 	}
 
-	s.db.LogMode(true)
+	s.db.LogMode(false)
 
 	s.db.AutoMigrate(&SpotPrice{})
 }

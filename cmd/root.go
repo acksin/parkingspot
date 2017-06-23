@@ -20,9 +20,8 @@ var cfgFile string
 var RootCmd = &cobra.Command{
 	Use:   "parkingspot",
 	Short: "Simplifying EC2 Spot Instances",
-	Long: `ParkingSpot simplifies using Spot Instances taking away
-the complexity of figuring out bids while still saving 
-a lot of money on machines.`,
+	Long: `ParkingSpot simplifies using EC2 Spot Instances taking away
+the complexity of figuring out bids while saving money.`,
 }
 
 // Execute adds all child commands to the root command sets flags appropriately.

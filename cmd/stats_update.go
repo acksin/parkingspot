@@ -34,7 +34,6 @@ to quickly create a Cobra application.`,
 		s := &stats.Stats{}
 		s.LoadDB()
 		s.DownloadPrices()
-		//s.Generate()
 	},
 }
 
