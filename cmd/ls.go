@@ -44,5 +44,4 @@ func init() {
 	newCmd.Flags().Float64VarP(&newSpotMeRequest.MaxBid, "max-bid", "b", -1, "Specify the Max Price you want to pay.")
 	newCmd.Flags().IntVarP(&newSpotMeRequest.MinCPU, "min-cpu", "c", -1, "Specify the min number of CPUs.")
 	newCmd.Flags().Float64VarP(&newSpotMeRequest.MinMemory, "min-memory", "m", -1, "Specify the min number of memorys.")
-
 }

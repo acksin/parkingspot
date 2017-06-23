@@ -6,7 +6,7 @@ build:
 deps:
 	go get -u github.com/mitchellh/gox
 
-release: 
+release:
 	./scripts/dist.sh
 
 stats/instance_types.go: stats/instanceTypes.js
