@@ -1,0 +1,78 @@
+#+TITLE: ParkingSpot
+
+* Introduction
+
+ParkingSpot can be used in many situations where you want to save
+money on computation. There is an API for ParkingSpot Pro users to
+use. Further, we provide different examples where you can use the API
+to run you infrastructure.
+
+* ParkingSpot API
+
+The ParkingSpot API is still under development and may change
+abruptly. We are still figuring out the best way to expose the data.
+
+* Applications
+** Request a Spot via Terraform
+
+  Here is an example of requesting a Spot Instance with
+  Terraform. This does not gurantee that the machine will come up
+  right away so make sure that your AMI is doing computation right off
+  the bat.
+
+  #+begin_src terraform
+    provider "aws" {
+      region = "us-west-2"
+    }
+
+    resource "aws_security_group" "allow_all" {
+      name = "allow_all_build"
+      description = "Allow all inbound traffic"
+
+      ingress {
+        from_port = 0
+        to_port = 0
+        protocol = "-1"
+        cidr_blocks = ["0.0.0.0/0"]
+      }
+
+      egress {
+        from_port = 0
+        to_port = 0
+        protocol = "-1"
+        cidr_blocks = ["0.0.0.0/0"]
+      }
+    }
+
+    resource "aws_spot_instance_request" "computator" {
+      ami = "ami-85b446e5"
+      instance_type = "c4.4xlarge"
+      availability_zone = "us-west-2c"
+
+      spot_price = "0.18"
+      count = 1
+      spot_type = "one-time"
+
+      security_groups = ["${aws_security_group.allow_all.name}"]
+
+      key_name = "acksin"
+      tags {
+        Name = "computator"
+      }
+    }
+  #+end_src
+
+** SeeSpot
+
+One of the problems with AWS Spot Instances is that upon a termination
+notification there is only two minutes before the machine goes away.
+
+[[https://github.com/acksin/seespot][SeeSpot]] provides a utility for AWS Spot instance that handles the
+health check if used with an AWS ELB and also handles cleanup of the
+instance when a termination notice is sent. When the termination
+notice is sent there is a 2 minute period before termination this
+handles the cleanup.
+
+#+begin_src sh
+seespot -health-port=8686 -health-path=/health -app-health="https://localhost:8080/health" -cleanup-task=/path/to/cleanup.sh
+#+end_src
