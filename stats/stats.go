@@ -12,6 +12,7 @@ import (
 	"sync"
 
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ec2"
 )
@@ -54,8 +55,10 @@ func (s *Stats) DownloadPrices() {
 
 	var wg sync.WaitGroup
 
+	log.Println(GetRegions())
 	for _, region := range GetRegions() {
 		wg.Add(1)
+		log.Println("here")
 
 		go func(r string) {
 			defer wg.Done()
@@ -67,10 +70,10 @@ func (s *Stats) DownloadPrices() {
 }
 
 func (s *Stats) download(region string, nextToken string, params *ec2.DescribeSpotPriceHistoryInput) {
-	var (
-		conf = aws.NewConfig().WithRegion(region)
-		svc  = ec2.New(session.New(conf))
-	)
+	svc := ec2.New(session.New(&aws.Config{
+		Region:      aws.String("us-west-2"),
+		Credentials: credentials.NewSharedCredentials("", "floydhub"),
+	}))
 
 	if params == nil {
 		var last *SpotPrice
